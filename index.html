@@ -7,6 +7,19 @@
         <link rel="stylesheet" href="http://openlayers.org/en/v3.11.0/css/ol.css" type="text/css">
         <script src="http://openlayers.org/en/v3.11.0/build/ol.js"></script>
         <meta charset="utf-8"/>
+        <style>
+           /* 
+            #marker {
+              width: 20px;
+              height: 20px;
+              border: 1px solid #088;
+              border-radius: 10px;
+              background-color: #0FF;
+              opacity: 0.5;
+            } 
+            */
+        
+        </style>
     </head>
     
     <body>
@@ -15,10 +28,18 @@
           <input name="search" size="80" type="text" placeholder="Wonach möchtest du suchen?">
           <input type="submit" value="Search">
         </form>
+        
+        <input id="clickMe" type="button" value="re-center on my location" onclick="doFunction();">
+        </input>
 
-        <div id="map" class="map"></div>
+        <div id="map" class="map">
+            <div id="marker" class="marker"></div>
+        </div>
+    
+        
 
         <script>
+
             var map = new ol.Map({
               layers: [
                 new ol.layer.Tile({
@@ -36,7 +57,7 @@
                 zoom: 13
               })
             });
-
+            
             var geolocation = new ol.Geolocation({
               projection: map.getView().getProjection(),
               tracking: true
@@ -65,6 +86,36 @@
               };
               xhr.send();
             };
+            
+            var input = document.getElementById('clickMe');
+            document.getElementById("clickMe").onclick = function(evt) {
+                evt.preventDefault()
+            var geolocation = new ol.Geolocation({
+              projection: map.getView().getProjection(),
+              tracking: true
+            });
+            var location = geolocation.on('change:position', function(evt) {
+              map.getView().setCenter(geolocation.getPosition());
+            });  
+            }
+            var el = document.getElementById("clickMe");
+            
+            if (el.addEventListener)
+                el.addEventListener("click", doFunction, false);
+            else if (el.attachEvent)
+                el.attachEvent('onclick', doFunction);
+
+var markers = new OpenLayers.Layer.Markers( "Marker" );
+map.addLayer(markers);
+
+var size = new OpenLayers.Size(21,25);
+var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+var icon = new OpenLayers.Icon('http://www.openlayers.org/dev/img/marker.png', size, offset);
+markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(0,0),icon));
+markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(0,0),icon.clone()));
+
+
+        
 
         </script>
         
