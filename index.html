@@ -33,7 +33,6 @@
         </input>
 
         <div id="map" class="map">
-            <div id="marker" class="marker"></div>
         </div>
     
         
@@ -53,7 +52,8 @@
                       style: new ol.style.Style({
                           image: new ol.style.Icon({
                               src: 'marker.png',
-                              anchor: [0.5, 0.9]
+                              anchor: [0.5, 0.9],
+                              scale: [0.1]
                           })
                       })
                   })
@@ -111,6 +111,7 @@
                     parseFloat(first.lon),
                     parseFloat(first.lat)
                   ]));
+                    marker.setGeometry(new ol.geom.Point(map.getView().getCenter()));
                 }
               };
               xhr.send();
