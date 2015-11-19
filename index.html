@@ -29,7 +29,7 @@
           <input type="submit" value="Search">
         </form>
         
-        <input id="clickMe" type="button" value="re-center on my location" onclick="doFunction();">
+        <input id="clickMe" type="button" value="re-center on my location">
         </input>
 
         <div id="map" class="map">
@@ -87,14 +87,15 @@
               xhr.send();
             };
             
+// re-center button
             var input = document.getElementById('clickMe');
-            document.getElementById("clickMe").onclick = function(evt) {
+            function doFunction(evt) {
                 evt.preventDefault()
             var geolocation = new ol.Geolocation({
               projection: map.getView().getProjection(),
               tracking: true
             });
-            var location = geolocation.on('change:position', function(evt) {
+            var location = geolocation.once('change:position', function(evt) {
               map.getView().setCenter(geolocation.getPosition());
             });  
             }
@@ -103,20 +104,9 @@
             if (el.addEventListener)
                 el.addEventListener("click", doFunction, false);
             else if (el.attachEvent)
-                el.attachEvent('onclick', doFunction);
-
-var markers = new OpenLayers.Layer.Markers( "Marker" );
-map.addLayer(markers);
-
-var size = new OpenLayers.Size(21,25);
-var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-var icon = new OpenLayers.Icon('http://www.openlayers.org/dev/img/marker.png', size, offset);
-markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(0,0),icon));
-markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(0,0),icon.clone()));
-
+                el.attachEvent("onclick", doFunction);
 
         
-
         </script>
         
     </body>
