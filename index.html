@@ -45,8 +45,20 @@
               layers: [
                 new ol.layer.Tile({
                   source: new ol.source.OSM()
-                })
+                }),
+                  new ol.layer.Vector({
+                  source: new ol.source.Vector({
+                  features: [marker]
+                }),
+                      style: new ol.style.Style({
+                          image: new ol.style.Icon({
+                              src: 'marker.png',
+                              anchor: [0.5, 0.9]
+                          })
+                      })
+                  })
               ],
+                
               controls: ol.control.defaults({
                 attributionOptions: ({
                   collapsible: false
