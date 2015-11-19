@@ -39,7 +39,8 @@
         
 
         <script>
-
+            
+            var marker = new ol.Feature();
             var map = new ol.Map({
               layers: [
                 new ol.layer.Tile({
@@ -65,7 +66,23 @@
             geolocation.once('change:position', function(evt) {
               map.getView().setCenter(geolocation.getPosition());
             });
+            
+            function relocate() {
+              var geolocation = new ol.Geolocation({projection: 'EPSG:3857'});
+              geolocation.setTracking(true);
+              geolocation.once('change:position', function(evt) {
+                geolocation.setTracking(false);
+                  
+                map.getView().setCenter(geolocation.getPosition(), map.getSize(), { nearest: true, Zoom: 13 });
+                marker.setGeometry(new ol.geom.Point(map.getView().getCenter()));
+                console.log("Accuracy of Geometry: " + geolocation.getAccuracy() + " meters");
+              });
+            }
+            relocate();
+            
 
+
+//searchform
             var form = document.getElementById('searchform');
             form.onsubmit = function(evt) {
               evt.preventDefault();
@@ -86,6 +103,7 @@
               };
               xhr.send();
             };
+            
             
 // re-center button
             var input = document.getElementById('clickMe');
